@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using NegotiationApp.Data.Entities.Configuration;
 
 namespace WebApplication1.Controllers
 {
@@ -6,16 +7,18 @@ namespace WebApplication1.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
+        private readonly NegotiaionAppDbContext _negotiaionAppDbContext;
         private static readonly string[] Summaries = new[]
         {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+        };
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, NegotiaionAppDbContext negotiaionAppDbContext )
         {
             _logger = logger;
+            _negotiaionAppDbContext = negotiaionAppDbContext;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
