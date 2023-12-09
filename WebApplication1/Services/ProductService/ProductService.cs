@@ -2,11 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NegotiationApp.Data.Entities.Configuration;
+using NegotiationApp.Entities.DTOs;
 using NegotiationApp.Entities.Products;
 
 namespace NegotiationApp.Services.ProductService
 {
-    public class ProductService: IProductService
+    public class ProductService : IProductService
     {
         private readonly NegotiaionAppDbContext _negotiaionAppDbContext;
 
@@ -25,26 +26,45 @@ namespace NegotiationApp.Services.ProductService
             return await _negotiaionAppDbContext.Products.FindAsync(id);
         }
 
-        public async Task CreateProductAsync(Product product)
+        public async Task<Product> CreateProductAsync(ProductCreateDto productToCreate)
         {
-            _negotiaionAppDbContext.Products.Add(product);
+            var newPoduct = new Product
+            {
+                Name = productToCreate.Name,
+                Price = productToCreate.Price
+            };
+
+            _negotiaionAppDbContext.Products.Add(newPoduct);
             await _negotiaionAppDbContext.SaveChangesAsync();
+
+            return newPoduct;
         }
 
-        public async Task UpdateProductAsync(Product product)
-        {
-            _negotiaionAppDbContext.Entry(product).State = EntityState.Modified;
-            await _negotiaionAppDbContext.SaveChangesAsync();
-        }
-
-        public async Task DeleteProductAsync(int id)
+        public async Task<Product> UpdateProductAsync(int id, ProductUpdateDto updatedProduct)
         {
             var product = await _negotiaionAppDbContext.Products.FindAsync(id);
-            if (product != null)
+
+            product.Price = updatedProduct.Price;
+            product.Name = updatedProduct.Name;
+
+            _negotiaionAppDbContext.Entry(product).State = EntityState.Modified;
+            await _negotiaionAppDbContext.SaveChangesAsync();
+
+            return product;
+        }
+
+        public async Task<bool> DeleteProductAsync(int id)
+        {
+            var product = await _negotiaionAppDbContext.Products.FindAsync(id);
+            bool productExist = product != null;
+
+            if (productExist)
             {
                 _negotiaionAppDbContext.Products.Remove(product);
                 await _negotiaionAppDbContext.SaveChangesAsync();
+                return true;
             }
+            else return false;
         }
     }
 }

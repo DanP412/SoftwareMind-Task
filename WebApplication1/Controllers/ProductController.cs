@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using NegotiationApp.Data.Entities.Configuration;
+using NegotiationApp.Entities.DTOs;
+using NegotiationApp.Entities.Products;
+using NegotiationApp.Services.ProductService;
 
 namespace WebApplication1.Controllers
 {
@@ -8,29 +12,78 @@ namespace WebApplication1.Controllers
     public class ProductController : ControllerBase
     {
         private readonly ILogger<ProductController> _logger;
-        private readonly NegotiaionAppDbContext _negotiaionAppDbContext;
+        private readonly IProductService _productService;
 
-        public ProductController(ILogger<ProductController> logger, NegotiaionAppDbContext negotiaionAppDbContext)
+        public ProductController(ILogger<ProductController> logger, IProductService productService)
         {
             _logger = logger;
-            _negotiaionAppDbContext = negotiaionAppDbContext;
-        }
-        [HttpGet(Name = "GetAllProducts")]
-        public IEnumerable<string> GetAll()
-        {
-            return new string[] { "value1", "value2" };
+            _productService = productService;
         }
 
-        [HttpPut(Name = "GetProduct")]
-        public ActionResult Update()
+        [HttpGet(Name = "GetAll")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetAll()
         {
-            return Ok();
+            var products = await _productService.GetAllProductsAsync();
+            bool productsExist = products != null;
+
+            if (productsExist)
+            {
+                return Ok(products);
+            }
+            else return BadRequest();
         }
 
-        [HttpDelete(Name ="DeleteProduct")]
-        public ActionResult Delete(int id)
+        [HttpGet("{id}", Name = "GetProductById")]
+        public async Task<ActionResult<Product>> Get(int id)
         {
-            return Ok();
+            var product = await _productService.GetProductByIdAsync(id);
+            bool productExist = product != null;
+
+            if (productExist)
+            {
+                return Ok(product);
+            }
+            else return BadRequest();
+        }
+
+        [HttpPost(Name = "AddProduct")]
+        public async Task<ActionResult> Post([FromBody] ProductCreateDto productToCreate)
+        {
+            var createdProduct = await _productService.CreateProductAsync(productToCreate);
+            bool productExist = createdProduct != null;
+
+            if (productExist)
+            {
+                return Ok(createdProduct);
+            }
+            else return BadRequest();
+        }
+
+        [HttpPut("{id}", Name = "UpdateProduct")]
+        public async Task<ActionResult> Update(int id, [FromBody] ProductUpdateDto productToUpdate)
+        {
+            var updatedProduct = await _productService.UpdateProductAsync(id, productToUpdate);
+            bool productExist = updatedProduct != null;
+
+            if (productExist)
+            {
+                return Ok(updatedProduct);
+            }
+
+            else return BadRequest();
+        }
+
+
+        [HttpDelete("{id}", Name = "DeleteProduct")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            bool successfullyDeleted = await _productService.DeleteProductAsync(id);
+
+            if (successfullyDeleted)
+            {
+                return Ok();
+            }
+            else return BadRequest();
         }
     }
 }

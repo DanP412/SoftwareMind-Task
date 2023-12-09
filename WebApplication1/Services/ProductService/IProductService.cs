@@ -1,4 +1,5 @@
-﻿using NegotiationApp.Entities.Products;
+﻿using NegotiationApp.Entities.DTOs;
+using NegotiationApp.Entities.Products;
 
 namespace NegotiationApp.Services.ProductService
 {
@@ -6,7 +7,8 @@ namespace NegotiationApp.Services.ProductService
     {
         Task<IEnumerable<Product>> GetAllProductsAsync();
         Task<Product> GetProductByIdAsync(int id);
-        Task UpdateProductAsync(Product product);
-        Task DeleteProductAsync(int id);
+        Task<Product> CreateProductAsync(ProductCreateDto productToCreate);
+        Task<Product> UpdateProductAsync(int id, ProductUpdateDto updatedProduct);
+        Task<bool> DeleteProductAsync(int id);
     }
 }
