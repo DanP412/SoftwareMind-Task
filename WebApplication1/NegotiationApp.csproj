@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NegotiationApp.Data\NegotiationApp.Data.csproj" />
+    <Folder Include="Services\Negotiation\" />
   </ItemGroup>
 
 </Project>

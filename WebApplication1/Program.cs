@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using NegotiationApp.Data.Entities.Configuration;
+using NegotiationApp.Services.VBalidation;
 
 namespace WebApplication1
 {
@@ -13,6 +14,8 @@ namespace WebApplication1
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddSingleton<IValidationService, ValidationService>();
+
             builder.Services.AddDbContext<NegotiaionAppDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("NegotiaionAppDbContext"));

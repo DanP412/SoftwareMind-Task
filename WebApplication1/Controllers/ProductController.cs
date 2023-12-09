@@ -1,83 +1,36 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using NegotiationApp.Data.Entities.Configuration;
 
 namespace WebApplication1.Controllers
 {
-    public class ProductController : Controller
+    [ApiController]
+    [Route("[controller]")]
+    public class ProductController : ControllerBase
     {
-        // GET: ProductController
-        public ActionResult Index()
+        private readonly ILogger<ProductController> _logger;
+        private readonly NegotiaionAppDbContext _negotiaionAppDbContext;
+
+        public ProductController(ILogger<ProductController> logger, NegotiaionAppDbContext negotiaionAppDbContext)
         {
-            return View();
+            _logger = logger;
+            _negotiaionAppDbContext = negotiaionAppDbContext;
+        }
+        [HttpGet(Name = "GetAllProducts")]
+        public IEnumerable<string> GetAll()
+        {
+            return new string[] { "value1", "value2" };
         }
 
-        // GET: ProductController/Details/5
-        public ActionResult Details(int id)
+        [HttpPut(Name = "GetProduct")]
+        public ActionResult Update()
         {
-            return View();
+            return Ok();
         }
 
-        // GET: ProductController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: ProductController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ProductController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: ProductController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ProductController/Delete/5
+        [HttpDelete(Name ="DeleteProduct")]
         public ActionResult Delete(int id)
         {
-            return View();
-        }
-
-        // POST: ProductController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return Ok();
         }
     }
 }

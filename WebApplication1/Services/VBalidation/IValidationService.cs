@@ -1,4 +1,4 @@
-﻿namespace WebApplication1.Services
+﻿namespace NegotiationApp.Services.VBalidation
 {
     public interface IValidationService
     {
