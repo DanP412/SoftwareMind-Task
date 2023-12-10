@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using NegotiationApp.Data.Entities.Configuration;
+using NegotiationApp.Services.NegotiationService;
 using NegotiationApp.Services.ProductService;
 using NegotiationApp.Services.Validation.Product;
 
@@ -17,6 +18,7 @@ namespace WebApplication1
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped<IProductValidationService, ProductValidationService>();
             builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<INegotiationService, NegotiationService>();
 
             builder.Services.AddDbContext<NegotiaionAppDbContext>(options =>
             {

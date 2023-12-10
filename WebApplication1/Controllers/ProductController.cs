@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using NegotiationApp.Data.Entities.Configuration;
-using NegotiationApp.Entities.DTOs;
+﻿using Microsoft.AspNetCore.Mvc;
+using NegotiationApp.Entities.DTOs.Product;
 using NegotiationApp.Entities.Products;
 using NegotiationApp.Services.ProductService;
 
@@ -69,7 +67,6 @@ namespace WebApplication1.Controllers
             {
                 return Ok(updatedProduct);
             }
-
             else return BadRequest();
         }
 

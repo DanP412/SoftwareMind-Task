@@ -1,4 +1,4 @@
-﻿using NegotiationApp.Entities.DTOs;
+﻿using NegotiationApp.Entities.DTOs.Product;
 using NegotiationApp.Entities.Products;
 
 namespace NegotiationApp.Services.ProductService

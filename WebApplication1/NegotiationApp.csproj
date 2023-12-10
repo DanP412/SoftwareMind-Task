@@ -18,8 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Negotiation\" />
-    <Folder Include="Services\Validation\Negotiation\" />
+    <Folder Include="Services\Validation\NegotiationValidationService\" />
   </ItemGroup>
 
 </Project>

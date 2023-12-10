@@ -4,7 +4,7 @@ namespace NegotiationApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class Negotiation : ControllerBase
+    public class NegotiationController : ControllerBase
     {
         [HttpGet]
         public IEnumerable<string> Get()

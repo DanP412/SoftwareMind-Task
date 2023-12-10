@@ -1,4 +1,4 @@
-﻿namespace NegotiationApp.Entities.DTOs
+﻿namespace NegotiationApp.Entities.DTOs.Product
 {
     public class ProductCreateDto
     {

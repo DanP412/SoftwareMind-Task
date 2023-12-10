@@ -1,6 +1,4 @@
-﻿using NegotiationApp.Entities.Negotiations;
-
-namespace NegotiationApp.Entities.Products
+﻿namespace NegotiationApp.Entities.Negotiations
 {
     public class Attempt
     {

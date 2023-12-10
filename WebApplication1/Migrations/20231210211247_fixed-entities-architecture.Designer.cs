@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NegotiationApp.Data.Entities.Configuration;
 
@@ -11,9 +12,11 @@ using NegotiationApp.Data.Entities.Configuration;
 namespace NegotiationApp.Migrations
 {
     [DbContext(typeof(NegotiaionAppDbContext))]
-    partial class NegotiaionAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231210211247_fixed-entities-architecture")]
+    partial class fixedentitiesarchitecture
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
