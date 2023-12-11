@@ -99,6 +99,7 @@ namespace NegotiationApp.Controllers
             {
                 return BadRequest("You cannot start another negotiation for the same product!");
             }
+
             var validatedNegotiation = _negotiationValidationService.CheckNegotiationEmployee(negotiationToCheck);
             var createdNegotiation = await _negotiationService.AddNegotiationAsync(new NegotiationCreateDto
             {
@@ -146,6 +147,10 @@ namespace NegotiationApp.Controllers
             else if (currentNegotiation.Status == "Closed")
             {
                 return BadRequest("This negotiation is closed ");
+            }
+            else if (currentNegotiation.Status == "Accepted")
+            {
+                return BadRequest("This negotiation has been already accepted ");
             }
 
             var ValidatedNegotiation = _negotiationValidationService.CheckNegotiationEmployee(negotiationToCheck);
