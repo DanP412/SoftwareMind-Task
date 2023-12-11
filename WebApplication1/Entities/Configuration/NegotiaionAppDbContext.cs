@@ -55,7 +55,7 @@ namespace NegotiationApp.Data.Entities.Configuration
                 entityTypeBuilder.ToTable("Negotiations");
                 entityTypeBuilder.HasKey(n => n.Id);
                 entityTypeBuilder.HasOne(n => n.Customer).WithMany().HasForeignKey(n => n.CustomerId);
-                entityTypeBuilder.HasOne(n => n.Employee).WithMany().HasForeignKey(n => n.EmployeeId);
+                entityTypeBuilder.HasOne(n => n.Employee).WithMany().HasForeignKey(n => n.EmployeeId).IsRequired(false);
                 entityTypeBuilder.HasOne(n => n.Product).WithMany().HasForeignKey(n => n.ProductId);
                 entityTypeBuilder.Property(n => n.ProposedPrice).IsRequired().HasColumnType("decimal(18, 2)");
             });
@@ -68,7 +68,7 @@ namespace NegotiationApp.Data.Entities.Configuration
                 entityTypeBuilder.HasOne(a => a.Negotiation)
                 .WithMany(n => n.Attempts)
                 .HasForeignKey(a => a.NegotiationId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
                 entityTypeBuilder.Property(a => a.Date).HasColumnType("date");
             });

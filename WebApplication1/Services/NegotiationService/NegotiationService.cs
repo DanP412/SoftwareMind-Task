@@ -59,9 +59,9 @@ namespace NegotiationApp.Services.NegotiationService
                 ProductId = negotiationToCreate.ProductId,
                 ProposedPrice = negotiationToCreate.ProposedPrice,
                 Status = "Pending",
-                Attempts = new List<Attempt> 
+                Attempts = new List<Attempt>
                 {
-                    new Attempt 
+                    new Attempt
                     {
                         Date = DateTime.Now
                     }
@@ -74,36 +74,40 @@ namespace NegotiationApp.Services.NegotiationService
             return newNegotiation;
         }
 
-        public async Task<Negotiation> UpdateNegotiationAsync(int id, NegotiationUpdateDto updatedNegotiation)
+        public async Task<NegotiationResponseDto> UpdateNegotiationAsync(int id, NegotiationUpdateDto updatedNegotiation)
         {
             var negotiation = await _negotiaionAppDbContext.Negotiations.FindAsync(id);
 
             negotiation.ProposedPrice = updatedNegotiation.ProposedPrice;
-            negotiation.Status = updatedNegotiation.Status;
 
-            negotiation.Attempts = new List<Attempt>
+            var newAttempt = new Attempt { Date = DateTime.Now };
+
+            negotiation.Attempts.Add(newAttempt);
+            _negotiaionAppDbContext.Entry(negotiation).State = EntityState.Modified;
+            await _negotiaionAppDbContext.SaveChangesAsync();
+
+            return new NegotiationResponseDto
             {
-                new Attempt
-                {
-                   Date = DateTime.Now
-                }
+                CustomerId = negotiation.CustomerId,
+                EmployeeId = negotiation.EmployeeId,
+                Id = negotiation.Id,
+                ProductId = negotiation.ProductId,
+                ProposedPrice = negotiation.ProposedPrice,
+                Status = negotiation.Status,
+                Attempts = negotiation.Attempts
             };
+        }
+        public async Task<Negotiation> UpdateNegotiationStatusAsync(int id, NegotiationStatusUpdateDto UpdatedNegotiationStatus)
+        {
+            var negotiation = await _negotiaionAppDbContext.Negotiations.FindAsync(id);
+
+            negotiation.Status = UpdatedNegotiationStatus.Status;
+            negotiation.EmployeeId = UpdatedNegotiationStatus.EmployeeId;
 
             _negotiaionAppDbContext.Entry(negotiation).State = EntityState.Modified;
             await _negotiaionAppDbContext.SaveChangesAsync();
 
             return negotiation;
-        } 
-        public async Task<Negotiation> UpdateNegotiationStatusAsync(int id, NegotiationStatusUpdateDto UpdatedNegotiationStatus)
-        {
-            var negotiationStatus = await _negotiaionAppDbContext.Negotiations.FindAsync(id);
-
-            negotiationStatus.Status = UpdatedNegotiationStatus.Status;
-
-            _negotiaionAppDbContext.Entry(negotiationStatus).State = EntityState.Modified;
-            await _negotiaionAppDbContext.SaveChangesAsync();
-
-            return negotiationStatus;
         }
 
         public async Task<bool> DeleteNegotiationAsync(int id)

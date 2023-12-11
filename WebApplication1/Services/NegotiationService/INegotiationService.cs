@@ -9,7 +9,7 @@ namespace NegotiationApp.Services.NegotiationService
         Task<bool> DeleteNegotiationAsync(int id);
         Task<IEnumerable<NegotiationResponseDto>> GetAllNegotiationsAsync();
         Task<NegotiationResponseDto> GetNegotiationByIdAsync(int id);
-        Task<Negotiation> UpdateNegotiationAsync(int id, NegotiationUpdateDto updatedNegotiation);
+        Task<NegotiationResponseDto> UpdateNegotiationAsync(int id, NegotiationUpdateDto updatedNegotiation);
         Task<Negotiation> UpdateNegotiationStatusAsync(int id, NegotiationStatusUpdateDto UpdatedNegotiationStatus);
     }
 }

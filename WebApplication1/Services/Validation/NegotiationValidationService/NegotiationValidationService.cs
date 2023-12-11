@@ -1,5 +1,6 @@
 ﻿using NegotiationApp.Data.Entities.Configuration;
 using NegotiationApp.Entities.DTOs.Negotiation;
+using NegotiationApp.Entities.Negotiations;
 
 namespace NegotiationApp.Services.Validation.NegotiationValidationService
 {
@@ -10,7 +11,7 @@ namespace NegotiationApp.Services.Validation.NegotiationValidationService
         {
             _negotiaionAppDbContext = negotiaionAppDbContext;
         }
-        public string ValidateNegotiation(NegotiationCreateDto negotiation)
+        public string ValidateNegotiation(Negotiation negotiation)
         {
             if (negotiation == null)
             {
@@ -20,14 +21,10 @@ namespace NegotiationApp.Services.Validation.NegotiationValidationService
             {
                 return "Proposed price must be posistive!";
             }
-            else if (negotiation.Status == "Closed")
-            {
-                return "You have reached the limit of your attempts at negotiation";
-            }
             else return string.Empty;
         }
 
-        public bool ProposedPriceIsValid(NegotiationCreateDto negotiation, decimal productPrice)
+        public bool ProposedPriceIsValid(Negotiation negotiation, decimal productPrice)
         {
             if (negotiation.ProposedPrice < (productPrice / 2))
             {
@@ -40,7 +37,21 @@ namespace NegotiationApp.Services.Validation.NegotiationValidationService
         public async Task<bool> CheckIfNegotiationAlreadyExist(int productId, int customerId)
         {
             return _negotiaionAppDbContext.Negotiations
-                .Any(n => n.ProductId == productId && n.CustomerId == customerId);
+                .Any(n =>  n.ProductId == productId && n.CustomerId == customerId);
+        }
+        public async Task<bool> NegotiationExist(int negotiationId)
+        {
+            return _negotiaionAppDbContext.Negotiations
+                .Any(n =>  n.Id == negotiationId);
+        }
+        public Negotiation CheckNegotiationEmployee(Negotiation negotiation)
+        {
+            if (negotiation.EmployeeId == 0)
+            {
+                negotiation.EmployeeId = null;
+            }
+
+            return negotiation;
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NegotiationApp.Data.Entities.Configuration;
 
@@ -11,9 +12,11 @@ using NegotiationApp.Data.Entities.Configuration;
 namespace NegotiationApp.Migrations
 {
     [DbContext(typeof(NegotiaionAppDbContext))]
-    partial class NegotiaionAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231211113634_nullable-EmmployeeId")]
+    partial class nullableEmmployeeId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -197,7 +200,7 @@ namespace NegotiationApp.Migrations
                     b.HasOne("NegotiationApp.Entities.Negotiations.Negotiation", "Negotiation")
                         .WithMany("Attempts")
                         .HasForeignKey("NegotiationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Negotiation");

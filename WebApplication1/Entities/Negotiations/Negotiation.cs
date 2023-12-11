@@ -8,7 +8,7 @@ namespace NegotiationApp.Entities.Negotiations
         public int Id { get; set; }
         public int ProductId { get; set; }
         public int CustomerId { get; set; }
-        public int EmployeeId { get; set; }
+        public int? EmployeeId { get; set; }
         public decimal ProposedPrice { get; set; }
         public string Status { get; set; }
         public ICollection<Attempt> Attempts { get; set; }
