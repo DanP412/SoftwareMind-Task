@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NegotiationApp.Entities.DTOs.Product;
 using NegotiationApp.Entities.Products;
 using NegotiationApp.Services.ProductService;
+using NegotiationApp.Services.Validation.Product;
+using System.Data;
 
 namespace WebApplication1.Controllers
 {
@@ -11,9 +14,15 @@ namespace WebApplication1.Controllers
     {
         private readonly ILogger<ProductController> _logger;
         private readonly IProductService _productService;
+        private readonly IProductValidationService _validationService;
 
-        public ProductController(ILogger<ProductController> logger, IProductService productService)
+        public ProductController(
+            ILogger<ProductController> logger, 
+            IProductService productService, 
+            IProductValidationService validationService
+            )
         {
+            _validationService = validationService;
             _logger = logger;
             _productService = productService;
         }
@@ -28,6 +37,7 @@ namespace WebApplication1.Controllers
             {
                 return Ok(products);
             }
+
             else return BadRequest();
         }
 
@@ -41,25 +51,40 @@ namespace WebApplication1.Controllers
             {
                 return Ok(product);
             }
+
             else return BadRequest();
         }
 
         [HttpPost(Name = "AddProduct")]
         public async Task<ActionResult> Post([FromBody] ProductCreateDto productToCreate)
         {
+            string errorMessage = _validationService.ValidateProduct(productToCreate);
+
             var createdProduct = await _productService.CreateProductAsync(productToCreate);
             bool productExist = createdProduct != null;
 
-            if (productExist)
+            if (productExist && errorMessage == string.Empty)
             {
                 return Ok(createdProduct);
             }
+
+            else if (errorMessage != string.Empty)
+            {
+                return BadRequest(errorMessage);
+            }
+
             else return BadRequest();
         }
 
         [HttpPut("{id}", Name = "UpdateProduct")]
         public async Task<ActionResult> Update(int id, [FromBody] ProductUpdateDto productToUpdate)
         {
+            string errorMessage = _validationService.ValidateProduct(new ProductCreateDto 
+            {
+                Name = productToUpdate.Name, 
+                Price = productToUpdate.Price
+            });
+
             var updatedProduct = await _productService.UpdateProductAsync(id, productToUpdate);
             bool productExist = updatedProduct != null;
 
@@ -67,9 +92,14 @@ namespace WebApplication1.Controllers
             {
                 return Ok(updatedProduct);
             }
+
+            else if (errorMessage != string.Empty)
+            {
+                return BadRequest(errorMessage);
+            }
+
             else return BadRequest();
         }
-
 
         [HttpDelete("{id}", Name = "DeleteProduct")]
         public async Task<IActionResult> Delete(int id)
@@ -80,6 +110,7 @@ namespace WebApplication1.Controllers
             {
                 return Ok();
             }
+
             else return BadRequest();
         }
     }

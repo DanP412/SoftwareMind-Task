@@ -70,7 +70,6 @@ namespace NegotiationApp.Data.Entities.Configuration
                 .HasForeignKey(a => a.NegotiationId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-                entityTypeBuilder.Property(a => a.NegotiationTries);
                 entityTypeBuilder.Property(a => a.Date).HasColumnType("date");
             });
 
